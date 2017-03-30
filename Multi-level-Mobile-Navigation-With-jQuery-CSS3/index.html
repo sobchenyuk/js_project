@@ -1,0 +1,357 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-level Mobile Navigation Example</title>
+<style>
+/* reset */
+
+
+
+
+.screen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  width: 480px;
+  height: 568px;
+  background-color: #ededed;
+  overflow: hidden;
+}
+@media (max-height: 568px) {
+
+.screen {
+  top: 24px;
+  bottom: auto;
+}
+}
+@media (max-width: 400px) {
+
+.screen {
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+}
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #242424;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+.menu-container {
+  position: relative;
+  -webkit-transform: translateX(0);
+  transform: translateX(0);
+  -webkit-transition: -webkit-transform 0.25s ease-out;
+  transition: -webkit-transform 0.25s ease-out;
+  transition: transform 0.25s ease-out;
+  transition: transform 0.25s ease-out, -webkit-transform 0.25s ease-out;
+}
+
+.view-submenu .menu-container {
+  -webkit-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+
+ul {
+  position: absolute;
+  top: 60px;
+  padding: 6px;
+  width: 100%;
+  height: 508px;
+  color: #ededed;
+  background-color: #313131;
+}
+
+ul li a {
+  opacity: 0;
+  display: block;
+  padding: 10px 12px;
+  position: relative;
+  cursor: pointer;
+  border-radius: 3px;
+  -webkit-transform: translateY(12px);
+  transform: translateY(12px);
+  -webkit-transition: opacity 0.15s 0.1s ease-out, -webkit-transform 0.15s 0.1s ease-out;
+  transition: opacity 0.15s 0.1s ease-out, -webkit-transform 0.15s 0.1s ease-out;
+  transition: opacity 0.15s 0.1s ease-out, transform 0.15s 0.1s ease-out;
+  transition: opacity 0.15s 0.1s ease-out, transform 0.15s 0.1s ease-out, -webkit-transform 0.15s 0.1s ease-out;
+}
+
+ul li.has-children span {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 12px 16px;
+  text-indent: -9999px;
+}
+
+ul li.has-children span:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 12px;
+  bottom: 0;
+  margin: auto;
+  padding: 4px;
+  width: 0px;
+  height: 0px;
+  cursor: pointer;
+  font-size: 0;
+  border-bottom: 2px solid #ededed;
+  border-right: 2px solid #ededed;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+ul li.has-children span:hover:after { border-color: #bababa; }
+
+.menu {
+  opacity: 0;
+  -webkit-transition: background-color 0.25s ease-out, opacity 0.15s ease-out;
+  transition: background-color 0.25s ease-out, opacity 0.15s ease-out;
+}
+
+.menu.is-visible { opacity: 1; }
+
+.menu.is-visible li a {
+  opacity: 1;
+  -webkit-transform: translateY(0);
+  transform: translateY(0);
+}
+
+.view-submenu .menu { background-color: #3e3e3e; }
+
+.view-submenu .menu > li > a {
+  opacity: 0;
+  -webkit-transition: opacity 0.15s ease-out;
+  transition: opacity 0.15s ease-out;
+}
+
+.submenu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: #313131;
+}
+
+.submenu li { margin-left: 60px; }
+
+.hide-submenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 508px;
+  cursor: pointer;
+  background-color: #313131;
+  -webkit-transition: background-color 0.25s ease-out;
+  transition: background-color 0.25s ease-out;
+}
+
+.hide-submenu:before {
+  opacity: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 12px;
+  bottom: 0;
+  margin: auto;
+  padding: 4px;
+  width: 6px;
+  height: 6px;
+  cursor: pointer;
+  font-size: 0;
+  border-bottom: 2px solid #ededed;
+  border-right: 2px solid #ededed;
+  -webkit-transform: rotate(135deg);
+  transform: rotate(135deg);
+  left: 0;
+  right: -6px;
+  -webkit-transition: opacity 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
+}
+
+.view-submenu .hide-submenu { background-color: #3e3e3e; }
+
+.view-submenu .hide-submenu:before {
+  opacity: 1;
+  -webkit-transition: opacity 0.15s 0.3s ease-out;
+  transition: opacity 0.15s 0.3s ease-out;
+}
+
+.toggle {
+  position: absolute;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  top: 0;
+  left: 18px;
+  bottom: 0;
+  margin: auto;
+  cursor: pointer;
+}
+
+.toggle span {
+  position: relative;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  font-size: 0;
+  width: 26px;
+  height: 2px;
+  background-color: #ededed;
+  border-radius: 100px;
+  -webkit-transition: background-color 0.2s ease-out;
+  transition: background-color 0.2s ease-out;
+}
+
+.toggle span:before, .toggle span:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #ededed;
+  border-radius: 100px;
+  -webkit-transition: -webkit-transform .2s ease-out;
+  transition: -webkit-transform .2s ease-out;
+  transition: transform .2s ease-out;
+  transition: transform .2s ease-out, -webkit-transform .2s ease-out;
+}
+
+.toggle span:before { bottom: calc(100% + 6px); }
+
+.toggle span:after { top: calc(100% + 6px); }
+
+.is-visible .toggle span { background-color: transparent; }
+
+.is-visible .toggle span:before {
+  bottom: auto;
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.is-visible .toggle span:after {
+  top: auto;
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+</style>
+</head>
+
+<body>
+<div class="screen">
+  <nav>
+    <div class="toggle"><span>Menu</span></div>
+    <div class="menu-container">
+      <ul class="menu visually-hidden">
+        <li><a>Home</a></li>
+        <li class="has-children"><a>Category<span>more</span></a>
+          <ul class="submenu">
+            <li><a>jQuery</a></li>
+            <li><a>HTML5</a></li>
+            <li><a>CSS3</a></li>
+          </ul>
+        </li>
+        <li><a>About</a></li>
+        <li><a>Contact</a></li>
+        <li class="has-children"><a>Social<span>more</span></a>
+          <ul class="submenu">
+            <li><a>Facebook</a></li>
+            <li><a>Twitter</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+<script src="http://code.jquery.com/jquery-3.0.0.min.js"></script> 
+<script>
+var nav           = $('nav');
+var menu          = $('.menu');
+var menuContainer = $('.menu-container');
+var subMenu       = $('.submenu');
+var toggle        = $('.toggle');
+var subToggle     = $('.has-children span');
+var back          = '<div class="hide-submenu"></div>';
+var subHide       = $(back);
+
+// Toggle menu
+toggle.on("click", function() {
+  nav.toggleClass('is-visible');
+  if(menu.hasClass('visually-hidden')) {
+    menu.toggleClass('visually-hidden is-visible')
+  } else {
+    menu.removeClass('is-visible');
+    // Wait for CSS animation
+    setTimeout(function() {
+      nav.removeClass('view-submenu');
+      menu.addClass('visually-hidden');
+    }, 200);
+  }
+});
+
+// Add submenu hide bar
+subHide.prependTo(subMenu);
+var subHideToggle = $('.hide-submenu');
+
+// Show submenu
+subToggle.on("click", function() {
+  nav.addClass('view-submenu');
+  // Hide all the submenus...
+  subMenu.hide();
+  // ...except for the one being called
+  $(this).parents('li').find('.submenu').show();
+});
+// Hide submenu
+subHideToggle.on("click", function() {
+  nav.removeClass('view-submenu');
+});
+
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

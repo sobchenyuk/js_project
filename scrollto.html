@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+
+
+
+
+// якорь один на всех
+
+
+<a href="" class="scrollto"></a>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+    $('.scrollto').bind( "click", function() {
+        $('html, body').stop().animate({
+            scrollTop: $(".block1").offset().top //указать тот элемент к которому будет опускатся скролл
+        }, 500);
+        return false;
+    });
+</script>
+
+
+
+
+</body>
+</html>
